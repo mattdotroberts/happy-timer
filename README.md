@@ -1,6 +1,6 @@
 # Happy Timer
 
-Stay on track with a cheerful pomodoro-style timer built for Raycast.
+Stay on track with a cheerful pomodoro-style timer built for Raycast. This project is forked from the original [Pomodoro Timer by asubbotin](https://www.raycast.com/asubbotin/pomodoro) and expands on it with session editing, tagging, and workflow improvements.
 
 [![raycast-cross-extension-badge]][raycast-cross-extension-link]
 
