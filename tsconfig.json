@@ -1,25 +1,17 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 16",
+  "include": ["src/**/*", "raycast-env.d.ts", "assets/**/*"],
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020"],
+    "lib": ["es2021"],
     "module": "commonjs",
-    "declaration": true,
-    "outDir": "./dist",
+    "target": "es2021",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "jsx": "react"
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "jsx": "react-jsx",
+    "resolveJsonModule": true
+  }
 }
