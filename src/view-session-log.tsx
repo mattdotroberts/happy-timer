@@ -80,12 +80,7 @@ export default function ViewSessionLog() {
           )}`}
         >
           {group.sessions.map((session) => (
-            <SessionItem
-              key={session.id}
-              session={session}
-              onRefresh={mutate}
-              allSessionsJSON={allSessionsJSON}
-            />
+            <SessionItem key={session.id} session={session} onRefresh={mutate} allSessionsJSON={allSessionsJSON} />
           ))}
         </List.Section>
       ))}
@@ -147,8 +142,8 @@ function SessionItem({
       }
       actions={
         <ActionPanel>
-          <Action.CopyToClipboard title="Copy All Sessions as JSON" content={allSessionsJSON} />
-          <Action.CopyToClipboard title="Copy Session as JSON" content={JSON.stringify(session, null, 2)} />
+          <Action.CopyToClipboard title="Copy All Sessions to Clipboard" content={allSessionsJSON} />
+          <Action.CopyToClipboard title="Copy Session to Clipboard" content={JSON.stringify(session, null, 2)} />
           <Action.Open title="Open Log File" target={getSessionsFilePath()} icon={Icon.Document} />
           <Action
             title="Refresh Sessions"
