@@ -2,30 +2,19 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "happy-timer",
   "title": "Happy Timer",
-  "description": "Stay on track with a cheerful pomodoro-style timer",
+  "description": "Stay on track with a cheerful focus timer built for Raycast",
   "icon": "icon.png",
   "crossExtensions": [
     "yakitrak/do-not-disturb"
   ],
-  "author": "asubbotin",
+  "author": "happyoperators",
   "contributors": [
-    "pernielsentikaer",
-    "brodelp",
-    "susan_thapa",
-    "mikikiv",
-    "MartinGonzalez",
-    "nathanjms",
-    "cchalop1",
-    "hayden_barnes",
-    "j3lte",
-    "litomore",
-    "ridemountainpig",
-    "meganpearson",
-    "alastair_scheuermann"
+    "happyoperators"
   ],
   "keywords": [
-    "pomodoro",
-    "timer"
+    "focus",
+    "timer",
+    "productivity"
   ],
   "categories": [
     "Productivity"

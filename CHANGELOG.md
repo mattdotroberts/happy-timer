@@ -1,4 +1,4 @@
-# Pomodoro Changelog
+# Happy Timer Changelog
 
 ## [Enhancement] - 2025-10-27
 
@@ -13,7 +13,7 @@
 
 ## [Fixes] - 2025-08-04
 
-- Fixed typo ("cycless" to "cycles") in the `View Pomodoro Stats` command
+- Fixed typo ("cycless" to "cycles") in the `View Happy Timer Stats` command
 
 ## [✨ AI Enhancements] - 2025-02-21
 
@@ -74,7 +74,7 @@ Add option to restart current interval/timer from one click in the menu bar
 
 ## [Enhancement] - 2024-04-23
 
-Add recap page to displays information about your prev pomodoro sessions like (total time, total sessions number, back to back sessions,..)
+Add recap page to display information about previous focus sessions like total time, total sessions, and back-to-back streaks
 
 ## [Enhancement] - 2024-02-27
 
