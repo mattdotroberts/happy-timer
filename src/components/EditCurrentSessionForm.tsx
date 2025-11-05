@@ -11,7 +11,7 @@ import {
   showToast,
 } from "@raycast/api";
 import { getCurrentInterval, updateCurrentIntervalDetails, duration } from "../lib/intervals";
-import { saveLastSessionChoice } from "../lib/lastSessionChoice";
+import { saveRecentSessionChoice } from "../lib/lastSessionChoice";
 import { secondsToTime } from "../lib/secondsToTime";
 
 type FormValues = {
@@ -77,7 +77,7 @@ export default function EditCurrentSessionForm() {
           return;
         }
 
-        await saveLastSessionChoice({
+        await saveRecentSessionChoice({
           intervalType: updatedInterval.type,
           durationSeconds: updatedInterval.length,
           tag: updatedInterval.tag ?? undefined,

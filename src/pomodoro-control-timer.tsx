@@ -28,7 +28,7 @@ import { checkDNDExtensionInstall } from "./lib/doNotDisturb";
 import AddSessionNoteForm from "./components/AddSessionNoteForm";
 import StartTaggedTimerForm from "./components/StartTaggedTimerForm";
 import { SessionRecord } from "./lib/sessionStore";
-import { getLastSessionChoice } from "./lib/lastSessionChoice";
+import { getRecentSessionChoices } from "./lib/lastSessionChoice";
 import { secondsToTime } from "./lib/secondsToTime";
 import { startTimer } from "./lib/timer";
 
@@ -66,43 +66,38 @@ const getIntervalMetadata = (intervalType: Interval["type"]) => {
 const ActionsList = () => {
   const currentInterval = getCurrentInterval();
   checkDNDExtensionInstall();
-  const { data: lastSessionChoice, isLoading: isLoadingLastSession } = usePromise(getLastSessionChoice, []);
+  const {
+    data: recentSessionChoices = [],
+    isLoading: isLoadingRecentSessions,
+    revalidate: refreshRecentSessions,
+  } = usePromise(getRecentSessionChoices, []);
 
-  const lastSessionAccessories = useMemo(() => {
-    if (!lastSessionChoice) {
-      return [];
-    }
-
-    const accessories: List.Item.Accessory[] = [];
-    if (lastSessionChoice.tag) {
-      accessories.push({ icon: Icon.Tag, text: lastSessionChoice.tag });
-    }
-    if (lastSessionChoice.name) {
-      accessories.push({ icon: Icon.TextDocument, text: lastSessionChoice.name });
-    }
-    return accessories;
-  }, [lastSessionChoice]);
-
-  const lastSessionSubtitle = useMemo(() => {
-    if (!lastSessionChoice) {
-      return undefined;
-    }
-    const { title } = getIntervalMetadata(lastSessionChoice.intervalType);
-    const durationLabel = secondsToTime(lastSessionChoice.durationSeconds);
-    return `${title} • ${durationLabel}`;
-  }, [lastSessionChoice]);
-
-  const lastSessionDurations = useMemo(() => {
-    if (!lastSessionChoice) {
-      return undefined;
-    }
-    return {
-      [lastSessionChoice.intervalType]: Math.round(lastSessionChoice.durationSeconds / 60),
-    };
-  }, [lastSessionChoice]);
+  const recentSessionItems = useMemo(() => {
+    return recentSessionChoices.map((choice) => {
+      const metadata = getIntervalMetadata(choice.intervalType);
+      const accessories: List.Item.Accessory[] = [];
+      if (choice.tag) {
+        accessories.push({ icon: Icon.Tag, text: choice.tag });
+      }
+      if (choice.name) {
+        accessories.push({ icon: Icon.TextDocument, text: choice.name });
+      }
+      const subtitle = `${metadata.title} • ${secondsToTime(choice.durationSeconds)}`;
+      const defaultDurations: Partial<Record<Interval["type"], number>> = {
+        [choice.intervalType]: Math.round(choice.durationSeconds / 60),
+      };
+      return {
+        choice,
+        metadata,
+        accessories,
+        subtitle,
+        defaultDurations,
+      };
+    });
+  }, [recentSessionChoices]);
 
   return (
-    <List navigationTitle="Control Pomodoro Timers" isLoading={isLoadingLastSession && !currentInterval}>
+    <List navigationTitle="Control Pomodoro Timers" isLoading={isLoadingRecentSessions && !currentInterval}>
       {currentInterval ? (
         <>
           {isPaused(currentInterval) ? (
@@ -147,40 +142,44 @@ const ActionsList = () => {
         </>
       ) : (
         <>
-          {lastSessionChoice && (
-            <List.Section title="Last Session">
-              <List.Item
-                title={lastSessionChoice.name ?? getIntervalMetadata(lastSessionChoice.intervalType).title}
-                icon={getIntervalMetadata(lastSessionChoice.intervalType).icon}
-                subtitle={lastSessionSubtitle}
-                accessories={lastSessionAccessories}
-                actions={
-                  <ActionPanel>
-                    <Action
-                      title="Start Again"
-                      onAction={createAction(() =>
-                        startTimer(lastSessionChoice.intervalType, {
-                          duration: lastSessionChoice.durationSeconds,
-                          tag: lastSessionChoice.tag,
-                          name: lastSessionChoice.name,
-                        }),
-                      )}
-                    />
-                    <Action.Push
-                      title="Edit Details"
-                      target={
-                        <StartTaggedTimerForm
-                          defaultIntervalType={lastSessionChoice.intervalType}
-                          defaultDurations={lastSessionDurations}
-                          defaultTag={lastSessionChoice.tag}
-                          defaultSessionName={lastSessionChoice.name}
-                          onCompleted={handleAfterTimerMutation}
-                        />
-                      }
-                    />
-                  </ActionPanel>
-                }
-              />
+          {recentSessionItems.length > 0 && (
+            <List.Section title="Recent Sessions">
+              {recentSessionItems.map(({ choice, metadata, accessories, subtitle, defaultDurations }) => (
+                <List.Item
+                  key={`${choice.intervalType}-${choice.durationSeconds}-${choice.tag ?? ""}-${choice.name ?? ""}-${choice.updatedAt}`}
+                  title={choice.name ?? metadata.title}
+                  icon={metadata.icon}
+                  subtitle={subtitle}
+                  accessories={accessories}
+                  actions={
+                    <ActionPanel>
+                      <Action
+                        title="Start Again"
+                        onAction={createAction(async () => {
+                          await startTimer(choice.intervalType, {
+                            duration: choice.durationSeconds,
+                            tag: choice.tag,
+                            name: choice.name,
+                          });
+                          await refreshRecentSessions();
+                        })}
+                      />
+                      <Action.Push
+                        title="Edit Details"
+                        target={
+                          <StartTaggedTimerForm
+                            defaultIntervalType={choice.intervalType}
+                            defaultDurations={defaultDurations}
+                            defaultTag={choice.tag}
+                            defaultSessionName={choice.name}
+                            onCompleted={handleAfterTimerMutation}
+                          />
+                        }
+                      />
+                    </ActionPanel>
+                  }
+                />
+              ))}
             </List.Section>
           )}
           <List.Section title="Start New">

@@ -2,7 +2,7 @@ import { launchCommand, LaunchType } from "@raycast/api";
 import { checkDNDExtensionInstall, setDND } from "./doNotDisturb";
 import { continueInterval, createInterval, pauseInterval, resetInterval } from "./intervals";
 import { IntervalType } from "./types";
-import { saveLastSessionChoice } from "./lastSessionChoice";
+import { saveRecentSessionChoice } from "./lastSessionChoice";
 
 type StartTimerOptions = {
   duration?: number;
@@ -19,7 +19,7 @@ export async function startTimer(type: IntervalType, options: StartTimerOptions 
     tag: options.tag,
     name: options.name,
   });
-  await saveLastSessionChoice({
+  await saveRecentSessionChoice({
     intervalType: interval.type,
     durationSeconds: interval.length,
     tag: interval.tag ?? undefined,
