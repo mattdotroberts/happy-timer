@@ -133,7 +133,7 @@ function SessionItem({
               <List.Item.Detail.Metadata.Label title="Duration" text={durationLabel} />
               <List.Item.Detail.Metadata.Label title="Started" text={startedAtDate.toLocaleString()} />
               <List.Item.Detail.Metadata.Label title="Ended" text={endedAtDate.toLocaleString()} />
-              {session.note ? <List.Item.Detail.Metadata.Text title="Reflection" text={session.note} /> : null}
+              {session.note ? <List.Item.Detail.Metadata.Label title="Reflection" text={session.note} /> : null}
               <List.Item.Detail.Metadata.Separator />
               <List.Item.Detail.Metadata.Label title="Session ID" text={session.id} />
             </List.Item.Detail.Metadata>

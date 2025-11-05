@@ -4,7 +4,7 @@ import { OAuthService, getAccessToken, useFetch, withAccessToken } from "@raycas
 import { exec } from "child_process";
 import { getCurrentInterval, isPaused, preferences } from "./lib/intervals";
 import { FocusText, ShortBreakText, LongBreakText } from "./lib/constants";
-import { GiphyResponse, Interval } from "./lib/types";
+import { GiphyResponse } from "./lib/types";
 import {
   getNextSlackIntervalExecutor,
   slackContinueInterval,
@@ -14,7 +14,7 @@ import {
   slackRestartInterval,
 } from "./lib/slack/slackIntervals";
 
-const createAction = (action: () => Promise<void> | Promise<Interval | undefined>) => async () => {
+const createAction = (action: () => unknown | Promise<unknown>) => async () => {
   await action();
 
   try {
